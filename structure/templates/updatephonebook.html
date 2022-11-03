@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block content %}
+    {# Features #}
+    <div class="col-xl-3 col-sm-6">
+      <div class="card">
+        <div class="card-body p-3">
+          <div class="row">
+            <div class="col-8">
+              <div class="numbers">
+                <p class="text-sm mb-0 text-capitalize font-weight-bold">SMS REMAINING:</p>
+                <h5 class="font-weight-bolder mb-0">
+                  <span class="text-success text-sm font-weight-bolder">{{user.credit}}</span>
+                </h5>
+              </div>
+            </div>
+            <div class="col-4 text-end">
+              <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<br>
+
+
+      <div class="row mt-4">
+        <div class="container rounded bg-white mt-5 mb-5">
+
+          <div class="card-body shadow-lg rounded ">
+          <div class="session-title row">
+               <h2>Edit Phonebook</h2>
+             
+               <form action="{{ url_for('core.editphonebook',phonebook_id=phonebook.id,next=url_for('core.index')) }}" method="post" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.name.label(class="form-group") }}
+                    {{form.name(class='form-control')  }}
+                  </div>
+                  <div class="form-group">
+                    {{ form.submit(class="btn btn-outline-info") }}
+                </div>
+              </div>
+            </form>
+            
+                          
+                  </div>
+                </div>
+                  <h2></h2>
+             
+                     
+                   </div>
+                   
+                   
+              </div>
+               
+               
+             
+           </div>
+      </div>    
+    </div>
+
+
+
+
+
+
+             
+
+
+
+
+
+
+
+         
+        </div>
+        </div>
+      </div>
+    </div>
+
+    
+    
+      
+     
+
+    
+{% endblock %}

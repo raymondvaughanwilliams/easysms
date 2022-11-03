@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block content %}
+    <!-- ====== Header End ====== -->
+
+    <!-- ====== Hero Start ====== -->
+   
+      <div class="card">
+        <div class="card-body p-3">
+          <div class="row">
+            <div class="col-8">
+              <div class="numbers">
+                <p class="text-sm mb-0 text-capitalize font-weight-bold">SMS REMAINING:</p>
+                <h5 class="font-weight-bolder mb-0">
+                  <span class="text-success text-sm font-weight-bolder">{{user.credit}}</span>
+                </h5>
+              </div>
+            </div>
+            <div class="col-4 text-end">
+              <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<br>
+
+   
+     
+
+            <div class="card-body shadow-lg rounded ">
+            <div class="session-title row">
+                 <h2>Schedule Message</h2>
+               
+                 <form class="form-group" method="POST" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+               
+                  
+                    <div class="form-group">
+                    {{ form.message.label(class="form-control-label") }}
+                    {{ form.message(class="form-control form-control-lg",onkeyup="countChar(this)" ) }}
+                    </div>
+                    <div id="charNum"></div>Characters remaining.Please note every 150 characters is one sms. If you use 151 characters you will be billed for two sms
+                    <div class="form-group">
+                        {{ form.destination.label(class="form-control-label") }}
+                        {{ form.destination(class="form-control form-control-lg") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.contacts.label(class="form-control-label") }}
+                            {{ form.contacts(class="form-control form-control-lg") }}
+                            </div>
+                            <label for="genre">Pick a Phonebook</label>
+                            <select name="phonebook" id="phonebook" class="form-control" >
+                              
+                             <option value=""> Select A Phonebook</option>
+                             {% for phonebook in phonebook_all %}
+                             <option value="{{phonebook.id}}">{{phonebook.name}}</option>
+                             {% endfor %}</select>
+
+                             <div class="form-group">
+                              {{ form.date.label(class="form-group") }}
+                              {{form.date(class='form-control')  }}
+                          </div>
+
+                          <div class="form-group">
+                            {{ form.time.label(class="form-group") }}
+                            {{form.time(class='form-control')  }}
+                        </div>
+                         
+                          
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                 </form>
+                            
+                    </div>
+                  </div>
+                    <h2></h2>
+               
+                       
+                     </div>
+                     
+                     
+                </div>
+                 
+                 
+               
+             </div>
+        </div>    
+         
+     </div>
+     </div>
+     </div>
+
+  
+
+  
+    <!-- ====== Team End ====== -->
+
+   
+
+    <!-- ====== Back To Top Start ====== -->
+    <a href="javascript:void(0)" class="back-to-top">
+      <i class="lni lni-chevron-up"> </i>
+    </a>
+    <!-- ====== Back To Top End ====== -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+    <!-- ====== All Javascript Files ====== -->
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}">
+
+    <script src="{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/wow.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/main.js') }}"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+    <script src="assets/js/wow.min.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script>
+          <link  type="application/javascript" href="{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}">
+
+  <script src="{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static',filename='js/wow.min.js') }}"></script>
+  <script src="{{ url_for('static',filename='js/main.js') }}"></script>
+  <script>
+    function countChar(val) {
+      var len = val.value.length;
+      if (len >= 150) {
+        val.value = val.value.substring(0, 1000);
+      } else {
+        $('#charNum').text(150 - len);
+       
+      }
+    };
+  
+  </script>
+    </body>
+</html>
+{% endblock %}
