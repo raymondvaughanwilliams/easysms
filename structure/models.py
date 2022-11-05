@@ -73,10 +73,11 @@ class Message(db.Model):
     api_id = db.Column(db.String(100))
     message_id = db.Column(db.String(50))
     platform = db.Column(db.String(30))
+    cost = db.Column(db.Integer)
 
 
 
-    def __init__(self,message,source,type,user_id,response_code,response_message,response_status,destination_json,response_successful,total_sent,total_rejected,date,time,api_id,message_id,platform):
+    def __init__(self,message,source,type,user_id,response_code,response_message,response_status,destination_json,response_successful,total_sent,total_rejected,date,time,api_id,message_id,platform,cost):
         self.message = message
         self.source = source
         self.type = type
@@ -94,6 +95,7 @@ class Message(db.Model):
         self.api_id = api_id
         self.message_id = message_id
         self.platform = platform
+        self.cost = cost
  
 
     def __repr__(self):
@@ -116,12 +118,13 @@ class SMSReport(db.Model):
     sender = db.Column(db.String(64))
     status = db.Column(db.String(64))
     user_id = db.Column(db.Integer,db.ForeignKey('users.id'),nullable=True)
-    users= db.relationship('User',backref='smsreports',lazy=True) 
+    users= db.relationship('User',backref='smsreports',lazy=True)
+    cost = db.Column(db.Integer)
 
 
 
 
-    def __init__(self,message_id,campaign_id,date,message,recepient,retries,sender,status,user_id):
+    def __init__(self,message_id,campaign_id,date,message,recepient,retries,sender,status,user_id,cost):
         self.message_id = message_id
         self.campaign_id = campaign_id
         self.message = message
@@ -131,6 +134,8 @@ class SMSReport(db.Model):
         self.sender = sender
         self.status = status
         self.user_id = user_id
+        self.cost = cost
+        
 
 
     def __repr__(self):
@@ -147,7 +152,8 @@ class Contact(db.Model):
     phonebook_id = db.Column(db.Integer,db.ForeignKey('phonebooks.id'),nullable=True)
     phonebooks= db.relationship('Phonebook',backref='contacts',lazy=True)
     user_id = db.Column(db.Integer,db.ForeignKey('users.id'),nullable=True)
-    users= db.relationship('User',backref='contacts',lazy=True)        
+    users= db.relationship('User',backref='contacts',lazy=True)
+            
 
     def __init__(self,name,number,phonebook_id,user_id):
         self.name = name

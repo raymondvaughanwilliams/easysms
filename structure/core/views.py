@@ -27,9 +27,11 @@ def index():
     user_id = user.id
     phonebooks = Phonebook.query.filter_by(user_id =user_id).all()
     contacts = Contact.query.filter_by(user_id = user_id).all()
-    messages = Message.query.filter_by(user_id=user_id).all()
+    page = request.args.get('page', 1, type=int)
+
+    messages = Message.query.filter_by(user_id=user_id).paginate(page, 20, False)
   
-    return render_template('index.html',phonebooks=phonebooks,contacts=contacts,messages=messages,user=user)
+    return render_template('index.html',phonebooks=phonebooks,contacts=contacts,messages=messages,user=user,page=page)
 
 @core.route('/base')
 def base():
@@ -257,19 +259,23 @@ def test():
 def reports():
     user = User.query.filter_by(email=session['email']).first()
     user_id = user.id
-    messages = Message.query.filter_by(user_id=user_id).all()
+    # messages = Message.query.filter_by(user_id=user_id).all()
+    page = request.args.get('page', 1, type=int)
+
+    messages = Message.query.filter_by(user_id=user_id).paginate(page, 20, False)
 
 
 
-    return render_template('oldmessages.html',messages=messages,user=user)
+    return render_template('oldmessages.html',messages=messages,user=user,page=page)
 
 @core.route('/campaignreports/<campaign_id>')
 @login_required
 def campaignreports(campaign_id):
     user = User.query.filter_by(email=session['email']).first()
     user_id = user.id
-    messages = SMSReport.query.filter_by(user_id=user_id,message_id=campaign_id).all()
-    return render_template('campaignreports.html',messages=messages,user=user)
+    page = request.args.get('page', 1, type=int)
+    messages = SMSReport.query.filter_by(user_id=user_id,message_id=campaign_id).paginate(page,15, False)
+    return render_template('campaignreports.html',messages=messages,user=user,page=page)
 
 
 
@@ -743,75 +749,167 @@ def routemessage():
         # response_data = response.json()
         # print("response_data")
         res = response.text.split("|")
-        print(res[0])
-        if len(res)>2:
-            api_id = res[2]
-        else:
-            api_id = "null"
-        # print(response_data)
-        # if len(data)<2:
-        message_save = Message(message=message,
-                            source="routesms",type="schedule",response_status="response_status",destination_json = destination_json
-                            ,response_message="ttest",response_code=res[0],user_id=user_id,total_sent="",response_successful="",date=mydate,time= mytime, total_rejected="",platform='fsfss',message_id=message_id,api_id=api_id)
+        # print(res[0])
+        # if len(res)>2:
+        #     api_id = res[2]
+        # else:
+        #     api_id = "null"
+        # # print(response_data)
+        # # if len(data)<2:
+        # message_save = Message(message=message,
+        #                     source="routesms",type="schedule",response_status="response_status",destination_json = destination_json
+        #                     ,response_message="ttest",response_code=res[0],user_id=user_id,total_sent="",response_successful="",date=mydate,time= mytime, total_rejected="",platform='fsfss',message_id=message_id,api_id=api_id)
 
-        db.session.add(message_save)
-        db.session.commit()
-        if len(data)>1:
-            for da in destination:
-                # message_save = Message(message=message,
-                #                 source="routesms",type="schedule",response_status="response_status",destination_json = da
-                #                 ,response_message="ttest",response_code=res[0],user_id=user_id,total_sent="",response_successful="",date=mydate,time= mytime, total_rejected="",platform='fsfss',message_id=message_id,api_id=api_id)
+        # db.session.add(message_save)
+        # db.session.commit()
+        # if len(data)>1:
+        #     for da in destination:
+        #         # message_save = Message(message=message,
+        #         #                 source="routesms",type="schedule",response_status="response_status",destination_json = da
+        #         #                 ,response_message="ttest",response_code=res[0],user_id=user_id,total_sent="",response_successful="",date=mydate,time= mytime, total_rejected="",platform='fsfss',message_id=message_id,api_id=api_id)
                 
-                # db.session.add(message_save)
-                # db.session.commit()
-                sms_save = SMSReport(message_id = message_id, campaign_id = campaign_id, date = date, recepient = da, sender = "source", status = res[0],retries = 0,message=message,user_id=user_id)
+        #         # db.session.add(message_save)
+        #         # db.session.commit()
+        #         sms_save = SMSReport(message_id = message_id, campaign_id = campaign_id, date = date, recepient = da, sender = "source", status = res[0],retries = 0,message=message,user_id=user_id)
             
-                db.session.add(sms_save)
-                db.session.commit()
+        #         db.session.add(sms_save)
+        #         db.session.commit()
         unfound_rates = []
         price = []
         p=0
         if len_message <151:
             multiplier = 1
-            print('multipli')
-            print(multiplier)
+            # print('multipli')
+            # print(multiplier)
         elif len_message > 150 and len_message < 300 :
             
             multiplier = 2
-            print('multipli')
-            print(multiplier)
+            # print('multipli')
+            # print(multiplier)
             
                     
         elif len_message > 300 and len_message <450:
             multiplier = 3
-            print('multipli')
-            print(multiplier)
+            # print('multipli')
+            # print(multiplier)
         elif len_message > 450 and len_message < 600:
             multiplier = 4
-            print('multipli')
-            print(multiplier)
+            # print('multipli')
+            # print(multiplier)
         
-        print ('multiplier') 
-        print (multiplier) 
-        for dest in destination:
-            dest_code = str(dest)
+        # print ('multiplier') 
+        # print (multiplier) 
+        # for dest in destination:
+        #     dest_code = str(dest)
+        #     dest_code = dest_code[:5]
+        #     print("code")
+        #     print(dest_code)
+        #     rate_found = Rate.query.filter_by(code=dest_code).first()
+        #     if rate_found:
+        #         price.append(rate_found.cost)
+        #         p += rate_found.cost
+        #         p = p * multiplier
+        #         # print(p)
+                
+        #     else:
+        #         unfound_rates.append(dest)
+        # print(unfound_rates)
+        # print(p)
+   
+
+        # user.balance = user.balance - p
+        # print("balance")
+        # print(user.balance)
+        # db.session.commit()
+        # print(user.balance) 
+        print(destination) 
+        lend = len(destination)
+        print(lend)
+        lene = 0
+        print(res)
+        print(res[1])
+        while lend > lene:
+            
+            lend -= 1
+            print(lend)
+            print(lene)
+            print("..count")
+            # for b in res:
+            dest_code = str(res[1])   
+            print(dest_code)
             dest_code = dest_code[:5]
-            print("code")
+            # print("code")
             print(dest_code)
             rate_found = Rate.query.filter_by(code=dest_code).first()
             if rate_found:
                 price.append(rate_found.cost)
+                sms_price = rate_found.cost
                 p += rate_found.cost
-                p = p * multiplier
-                # print(p)
-                
             else:
-                unfound_rates.append(dest)
-        print(unfound_rates)
-        print(p)
-   
-
+                sms_price = 0
+                p += 0
+            p = p * multiplier
+            print(p)
+        if res[0] != '1201':
+            # print("successful")
+            # print (res)
+            dest_code = str(res[1])
+            dest_code = dest_code[:5]
+            # print("code")
+            # print(dest_code)
+            # rate_found = Rate.query.filter_by(code=dest_code).first()
+            # if rate_found:
+            #     price.append(rate_found.cost)
+            #     sms_price = rate_found.cost
+            #     p += rate_found.cost
+            # else:
+            #     sms_price = 0
+            #     p += 0
+            # p = p * multiplier
+            # print(p)
+            if len(res)>2:
+                api_id = res[2]
+            else:
+                api_id = "null"
+                
+            # print("api")
+            # print(api_id)
+            # print(data)
+            # print(len(res))
+            # print(response_data)
+            # if len(data)<2:
+            message_save = Message(message=message,
+                                source="routesms",type="schedule",response_status="response_status",destination_json = destination_json
+                                ,response_message="ttest",cost=sms_price,response_code=res[0],user_id=user_id,total_sent="",response_successful="",date=mydate,time= mytime, total_rejected="",platform='fsfss',message_id=message_id,api_id=api_id)
+            
+            db.session.add(message_save)
+            db.session.commit()
+            print("saved")
+            tmpdata = data['destination']
+            if len(tmpdata) > 1:
+                for da in destination:
+                    # message_save = Message(message=message,
+                    #                 source="routesms",type="schedule",response_status="response_status",destination_json = da
+                    #                 ,response_message="ttest",response_code=res[0],user_id=user_id,total_sent="",response_successful="",date=mydate,time= mytime, total_rejected="",platform='fsfss',message_id=message_id,api_id=api_id)
+                    
+                    # db.session.add(message_save)
+                    # db.session.commit()
+                    sms_save = SMSReport(message_id = message_id, campaign_id = campaign_id, date = date, recepient = da, sender = "source", status = res[0],retries = 0,message=message,user_id=user_id,cost=sms_price)
+                
+                    db.session.add(sms_save)
+                    db.session.commit()
+            
+                # else:
+                #     unfound_rates.append(res[1])
+                #     print("invalid destination")
+            else:
+                print("failed")
+                print(res)
+                
         user.balance = user.balance - p
+        print("balance")
+        print(p)
+        print(user.balance)
         db.session.commit()
         print(user.balance) 
 
@@ -1328,9 +1426,12 @@ def myreports():
     form = ContactForm()
     user = User.query.filter_by(email=session['email']).first()
     user_id = user.id
-    reports = Message.query.filter_by(user_id=user_id).all()
+    page = request.args.get('page', 1, type=int)
 
-    return render_template('userportal/myreports.html',messages=reports,form=form,user=user)
+    # messages = Message.query.filter_by(user_id=user_id).paginate(page, 20, False)
+    reports = Message.query.filter_by(user_id=user_id).paginate(page, 20, False)
+
+    return render_template('userportal/myreports.html',messages=reports,form=form,user=user,page=page)
 
 
 @core.route('/myphonebooks', methods=['GET', 'POST'])
