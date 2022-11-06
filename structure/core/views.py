@@ -2,6 +2,7 @@ from flask import render_template,request,Blueprint,session,current_app,redirect
 from structure.models import User, Message, Contact, Phonebook, Package ,Payment,SenderId,SMSReport , Rate
 from structure.core.forms import MessageForm,ContactForm,PhonebookForm,SenderIDForm,RatesForm
 from structure.users.forms import RegistrationForm
+from os import environ
 
 # from structure.team.views import team
 from sqlalchemy.orm import load_only
@@ -54,9 +55,12 @@ def test():
 
     print(user)
     # rslr.connectbind.com:8080/bulksms/bulksms?username=dlp-test123&password=D3l3ph@!&type=0&dlr=1&destination=233551660436&source=test&message=atest
-    # http://rslr.connectbind.com:8080/bulksms/bulksms?username=dlp-testacc&password=tE$t1234&type=0&dlr=1&destination=233551660436&source=test&message=atest
+    # http://rslr.connectbind.com:8080/bulksms/bulksms?username=dlp-testacc&password=&type=0&dlr=1&destination=233551660436&source=test&message=atest
+    rpassword = environ.get('ROUTESMS_PASS')
+    print("rpassword")
+    print(rpassword)
     username = "dlp-testacc"
-    password = "tE$t1234"
+    password = rpassword
     type = 0
     dlr = 1
     destination = ['0551660436','0244614107']
@@ -71,7 +75,8 @@ def test():
     # print (dictFromServer)
     # return (rslr.connectbind.com:8080/bulksms?username=username&password=password&type=type&dlr=dlr&destination=destination&source=source&message=message)
     endPoint = 'https://api.mnotify.com/api/sms/quick'
-    apiKey = 'DGh55p4QDIFgIzskqW8unzHRhjHjnOJ1u07Apbq2T6iBG'
+    akey = environ.get('MNOTIFY_KEY')
+    apiKey = akey
     data = {
     'recipient[]':['0551660436','23324522000222'],
     'sender': 'ChampLabs',
@@ -124,7 +129,8 @@ def test():
     undeliveredendPoint = 'https://api.mnotify.com/api/campaign/'   + api_id +'/undelivered'
 
 
-    apiKey = 'DGh55p4QDIFgIzskqW8unzHRhjHjnOJ1u07Apbq2T6iBG' 
+    akey = environ.get('MNOTIFY_KEY')
+    apiKey = akey    
     url = undeliveredendPoint + '?key=' + apiKey
     response = urllib.request.urlopen(url)
     undelivereddata = response.read()
@@ -154,7 +160,8 @@ def test():
 
     deliveredendPoint = 'https://api.mnotify.com/api/campaign/'   + api_id +'/delivered'
 
-    apiKey = 'DGh55p4QDIFgIzskqW8unzHRhjHjnOJ1u07Apbq2T6iBG' 
+    akey = environ.get('MNOTIFY_KEY')
+    apiKey = akey
     url = deliveredendPoint + '?key=' + apiKey
     response = urllib.request.urlopen(url)
     deliveredendPoint = response.read()
@@ -185,7 +192,7 @@ def test():
 
     # # print(response_summary)
     # endPoint2 = 'https://api.mnotify.com/api/campaign/'+ api_id
-    # apiKey2 = 'DGh55p4QDIFgIzskqW8unzHRhjHjnOJ1u07Apbq2T6iBG'
+    # apiKey2 = 
     # url = endPoint2 + '?key=' + apiKey2
     # response2 = urllib.request.urlopen(url)
     # mdata = response2.read()
@@ -288,7 +295,8 @@ def smsreports():
 
     messages = Message.query.filter_by(user_id=user_id).all()
     endPoint = 'https://api.mnotify.com/api/campaign/apiv2-2022-08-16-233551660436'
-    apiKey = 'DGh55p4QDIFgIzskqW8unzHRhjHjnOJ1u07Apbq2T6iBG'
+    akey = environ.get('MNOTIFY_KEY')
+    apiKey = akey
     url = endPoint + '?key=' + apiKey
     response = urllib.request.urlopen(url)
     mdata = response.read()
@@ -365,7 +373,8 @@ def sreports():
 # API endpoint.
     endPoint = 'https://api.mnotify.com/api/campaign/25C85999-5903-4CC2-95EF-1FBCAD3FCF0F/delivered'
 
-    apiKey = 'DGh55p4QDIFgIzskqW8unzHRhjHjnOJ1u07Apbq2T6iBG' 
+    akey = environ.get('MNOTIFY_KEY')
+    apiKey = akey
     url = endPoint + '?key=' + apiKey
     response = urllib.request.urlopen(url)
     mdata = response.read()
@@ -440,7 +449,8 @@ def senderids():
         sendername = form.name.data
         description = form.description.data
         endPoint = 'https://api.mnotify.com/api/senderid/register'
-        apiKey = 'DGh55p4QDIFgIzskqW8unzHRhjHjnOJ1u07Apbq2T6iBG'
+        akey = environ.get('MNOTIFY_KEY')
+        apiKey = akey
         data = {
         'sender_name': sendername,
         'purpose': description,
@@ -527,7 +537,7 @@ def senderids():
 #         # print(number_messages)
 #         destination_json = json.dumps(data)
 #         endPoint = 'https://api.mnotify.com/api/sms/quick'
-#         apiKey = 'DGh55p4QDIFgIzskqW8unzHRhjHjnOJ1u07Apbq2T6iBG'
+#         apiKey = 
 #         data = {
 #         'recipient[]':data,
 #         'sender': 'ChampLabs',
@@ -729,14 +739,15 @@ def routemessage():
         number_messages = len(data)
         destination = data 
         message = form.message.data
-        # http://rslr.connectbind.com:8080/bulksms/bulksms?username=dlp-testacc&password=tE$t1234&type=0&dlr=1&destination=233551660436&source=test&message=atest
+        # http://rslr.connectbind.com:8080/bulksms/bulksms?username=dlp-testacc&password=tE$&type=0&dlr=1&destination=233551660436&source=test&message=atest
         # print(number_messages)
         destination_json = json.dumps(data)
         url = 'http://rslr.connectbind.com:8080/bulksms/bulksms'
-        apiKey = 'DGh55p4QDIFgIzskqW8unzHRhjHjnOJ1u07Apbq2T6iBG'
+        # apiKey = 
+        rpassword = environ.get('ROUTESMS_PASS')
         data = {
             'username': 'dlp-testacc',
-            'password': 'tE$t1234',
+            'password': rpassword,
             'type':'0',
             'dlr':'1',
             'destination':destination,
@@ -988,7 +999,7 @@ def message():
         # print(number_messages)
         destination_json = json.dumps(data)
         endPoint = 'https://api.mnotify.com/api/sms/quick'
-        apiKey = 'DGh55p4QDIFgIzskqW8unzHRhjHjnOJ1u07Apbq2T6iBG'
+        # apiKey = 
         data = {
         'recipient[]':data,
         'sender': 'ChampLabs',
@@ -1044,7 +1055,8 @@ def message():
 
             deliveredendPoint = 'https://api.mnotify.com/api/campaign/'   + api_id +'/delivered'
 
-            apiKey = 'DGh55p4QDIFgIzskqW8unzHRhjHjnOJ1u07Apbq2T6iBG' 
+            akey = environ.get('MNOTIFY_KEY')
+            apiKey = akey
             url = deliveredendPoint + '?key=' + apiKey
             response = urllib.request.urlopen(url)
             deliveredendPoint = response.read()
@@ -1081,7 +1093,8 @@ def message():
 
 
             undeliveredendPoint = 'https://api.mnotify.com/api/campaign/'+ api_id +'/undelivered'
-            apiKey = 'DGh55p4QDIFgIzskqW8unzHRhjHjnOJ1u07Apbq2T6iBG' 
+            akey = environ.get('MNOTIFY_KEY')
+            apiKey = akey
             url = undeliveredendPoint + '?key=' + apiKey
             print(url)
             response = urllib.request.urlopen(url)
@@ -1188,14 +1201,18 @@ def schedule_routesms():
         print("contacts")
         print(dataa)
         number_messages = len(dataa)
-        #  http://rslr.connectbind.com:8080/bulksms/bulksms?username=dlp-testacc&password=tE$t1234&type=0&dlr=1&destination=233551660436&source=test&message=atest
-# http://rslr.connectbind.com:8080/bulksms/schedulesms?username=dlp-testacc&password=tE$t1234&message=TestingScheduleMsgAPI&type=0&dlr=1&source=TESTSM&destination=233551660436&date=10/10/2022&time=04:45%20pm&gmt=GMT
+        akey = environ.get('MNOTIFY_KEY')
+        print("akey")
+        print(akey)
+        #  http://rslr.connectbind.com:8080/bulksms/bulksms?username=dlp-testacc&password=&type=0&dlr=1&destination=233551660436&source=test&message=atest
+# http://rslr.connectbind.com:8080/bulksms/schedulesms?username=dlp-testacc&password=&message=TestingScheduleMsgAPI&type=0&dlr=1&source=TESTSM&destination=233551660436&date=10/10/2022&time=04:45%20pm&gmt=GMT
         destination_json = json.dumps(dataa)
         url = 'http://rslr.connectbind.com:8080/bulksms/schedulesms'
-        apiKey = 'DGh55p4QDIFgIzskqW8unzHRhjHjnOJ1u07Apbq2T6iBG'
+        apiKey = akey
+        rpassword = environ.get('ROUTESMS_PASS')
         data = {
             'username': 'dlp-testacc',
-            'password': 'tE$t1234',
+            'password': rpassword,
             'type':'0',
             'dlr':'1',
             'destination':dataa,
@@ -1218,26 +1235,7 @@ def schedule_routesms():
         else:
             api_id = "null"
         # print(response_data)
-        message_save = Message(message=message,
-                            source="routesms",type="schedule",response_status="response_status",destination_json = destination_json
-                            ,response_message="ttest",response_code=res[0],user_id=user_id,total_sent="",response_successful="",date=mydate,time= mytime, total_rejected="",platform='fsfss',message_id=message_id,api_id=api_id)
-
-        db.session.add(message_save)
-        db.session.commit()
-        if len(data)>1:
-
-
-            for da in dataa:
-            # message_save = Message(message=message,
-            #                 source="routesms",type="schedule",response_status="response_status",destination_json = da
-            #                 ,response_message="ttest",response_code=res[0],user_id=user_id,total_sent="",response_successful="",date=mydate,time= mytime, total_rejected="",platform='fsfss',message_id=message_id,api_id=api_id)
-
-            # db.session.add(message_save)
-            # db.session.commit()
-                sms_save = SMSReport(message_id = message_id, campaign_id = "campaign_id", date = date, recepient = da, sender = "source", status = res[0],retries = 0,message=message,user_id=user_id)
-            
-                db.session.add(sms_save)
-                db.session.commit()
+        
         
         unfound_rates = []
         price = []
@@ -1269,6 +1267,28 @@ def schedule_routesms():
                 p = p * multiplier
             else:
                 unfound_rates.append(dest)
+        message_save = Message(message=message,
+                            source="routesms",type="schedule",response_status="response_status",destination_json = destination_json
+                            ,response_message="ttest",cost=p,response_code=res[0],user_id=user_id,total_sent="",response_successful="",date=mydate,time= mytime, total_rejected="",platform='fsfss',message_id=message_id,api_id=api_id)
+
+        db.session.add(message_save)
+        db.session.commit()
+        if len(data)>1:
+
+
+            for da in dataa:
+            # message_save = Message(message=message,
+            #                 source="routesms",type="schedule",response_status="response_status",destination_json = da
+            #                 ,response_message="ttest",response_code=res[0],user_id=user_id,total_sent="",response_successful="",date=mydate,time= mytime, total_rejected="",platform='fsfss',message_id=message_id,api_id=api_id)
+
+            # db.session.add(message_save)
+            # db.session.commit()
+                sms_save = SMSReport(cost=p,message_id = message_id, campaign_id = "campaign_id", date = date, recepient = da, sender = "source", status = res[0],retries = 0,message=message,user_id=user_id)
+            
+                db.session.add(sms_save)
+                db.session.commit()
+        
+        
         user.balance = user.balance - p
         db.session.commit()
         print(user.balance) 
@@ -1338,7 +1358,8 @@ def schedule_message():
         print(number_messages)
         destination_json = json.dumps(data)
         endPoint = 'https://api.mnotify.com/api/sms/quick'
-        apiKey = 'DGh55p4QDIFgIzskqW8unzHRhjHjnOJ1u07Apbq2T6iBG'
+        akey = environ.get('MNOTIFY_KEY')
+        apiKey = akey
         data = {
         'recipient[]':data,
         'sender': 'ChampLabs',
