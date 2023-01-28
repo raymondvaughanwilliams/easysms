@@ -40,6 +40,7 @@ def login():
         # Grab the user from our User Models table
         user = User.query.filter_by(email=form.email.data).first()
         session['id'] = user.id
+        session['role'] = user.role
         # session['role'] = user.role
 
 

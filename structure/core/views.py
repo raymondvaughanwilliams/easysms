@@ -1,5 +1,5 @@
 from flask import render_template,request,Blueprint,session,current_app,redirect,url_for
-from structure.models import User, Message, Contact, Phonebook, Package ,Payment,SenderId,SMSReport , Rate
+from structure.models import User, Message, Contact, Phonebook, Package ,Payment,SenderId,SMSReport , Rate,Topup
 from structure.core.forms import MessageForm,ContactForm,PhonebookForm,SenderIDForm,RatesForm
 from structure.users.forms import RegistrationForm
 from os import environ
@@ -30,7 +30,7 @@ def index():
     contacts = Contact.query.filter_by(user_id = user_id).all()
     page = request.args.get('page', 1, type=int)
 
-    messages = Message.query.filter_by(user_id=user_id).paginate(page, 20, False)
+    messages = Message.query.filter_by(user_id=user_id).order_by(Message.id.desc()).paginate(page, 20, False)
   
     return render_template('index.html',phonebooks=phonebooks,contacts=contacts,messages=messages,user=user,page=page)
 
@@ -278,10 +278,12 @@ def reports():
 @core.route('/campaignreports/<campaign_id>')
 @login_required
 def campaignreports(campaign_id):
-    user = User.query.filter_by(email=session['email']).first()
+    user = User.query.filter_by(id=session['id']).first()
     user_id = user.id
     page = request.args.get('page', 1, type=int)
     messages = SMSReport.query.filter_by(user_id=user_id,message_id=campaign_id).paginate(page,15, False)
+    print('messages')
+    print(messages.items)
     return render_template('campaignreports.html',messages=messages,user=user,page=page)
 
 
@@ -671,7 +673,7 @@ def editrate(rate_id):
         rate.route = form.route.data
         db.session.commit() 
         print('updated')
-        return redirect(url_for('core.addcontact'))
+        return redirect(url_for('core.index'))
 
     elif request.method == 'GET':
         form.cost.data = rate.cost
@@ -1463,6 +1465,7 @@ def myphonebooks():
     user_id = user.id
     reports = Message.query.filter_by(user_id=user_id).all()
     phonebooks = Phonebook.query.filter_by(user_id=user.id).all()
+ 
 
     return render_template('userportal/myphonebooks.html',phonebooks=phonebooks,form=form,user=user)
 
@@ -1475,19 +1478,22 @@ def addcontact():
     user_id = user.id
     contacts = Contact.query.filter_by(user_id=user_id).all()
 
-    phonebooks = Phonebook.query.all()
+    phonebooks = Phonebook.query.filter_by(user_id=user.id).all()
     # genre = request.form.get('geenre')
     if request.method == 'POST':
         name = form.name.data
         number = form.number.data
         phonebook = form.phonebook.data
+        contactphonebook = Phonebook.query.filter_by(id=phonebook).first()
         print("phonebook")
         print(phonebook)
         contact_save = Contact(name=name,
                         number=number,phonebook_id=phonebook,user_id=user_id)
         db.session.add(contact_save)
+        contactphonebook.numberofcontacts = contactphonebook.numberofcontacts  + 1
         db.session.commit()
         print("saved")
+        
         return redirect(url_for('core.addcontact'))
 
 
@@ -1816,3 +1822,58 @@ def topup(user_id):
     return redirect(url_for('core.adduser'))
     
 
+@core.route('/topup')
+@login_required
+def routesms_topup():
+    form = MessageForm()
+    user = User.query.filter_by(id=session['id']).first()
+    user_id = user.id
+    # messages = Message.query.filter_by(user_id=user_id).all()
+    page = request.args.get('page', 1, type=int)
+    reference = user.email[0:6]+ str(random.randint(1,10000))
+    topups = Topup.query.filter_by(user_id=user_id).paginate(page, 20, False)
+    return render_template('userportal/topup.html',topups=topups,user=user,page=page,form=form,tx_ref=reference)
+
+
+
+@core.route("/confirmravepayment",methods=["GET", "POST"])
+@login_required
+def confirm():
+    user = User.query.filter_by(id=session['id']).first()
+    # uid = user.id
+    statuss = request.args.get('status')
+    print('hjhk')
+    print(statuss)
+    if request.args.get('status') == "successful":
+        print("cart:")
+        print (session['cart'])
+        session['paid']= True
+        print("paid:")
+        print (session['paid'])
+        transaction_id = request.args.get('transaction_id')
+        # user = User.query.filter_by(email=session['email']).first()
+        status = request.args.get('status')
+        tx_ref = request.args.get('tx_ref')
+        amount = request.args.get('amount')
+        amount = int(amount)
+        print(tx_ref)
+        # tid = request.args.get('tid')
+        tickets = request.args.get('tickets')
+        print('tiick')
+        cart_length=(len(session['cart']))
+        # print(len(tickets)) 
+        topup = Topup(amount=amount,status=status,transaction_id=transaction_id,reference=tx_ref)
+        db.session.add(topup)
+        db.session.commit()
+ 
+  
+        # session.pop('cart')            
+
+        return redirect(url_for('core.topup',msg="TopUp done"))
+    else:
+        return "failed"
+
+
+
+
+    return render_template('userportal/topup.html',topups=topups,user=user,page=page,form=form,tx_ref=reference)

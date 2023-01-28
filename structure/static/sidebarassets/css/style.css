@@ -7710,7 +7710,10 @@ h1, h2, h3, h4, h5,
   -webkit-transition: all 0.3s;
   -o-transition: all 0.3s;
   transition: all 0.3s;
-  position: relative; }
+  position: relative;
+  height: 100vw;
+  bottom: 0;
+}
   #sidebar .h6 {
     color: #fff; }
   #sidebar.active {
@@ -7808,14 +7811,14 @@ a[data-toggle="collapse"] {
   color: rgba(255, 255, 255, 0.5); }
 
 .form-control {
-  height: 40px !important;
+  /* height: 40px !important; */
   background: #fff;
   color: #000;
   font-size: 13px;
   border-radius: 4px;
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
-  border: transparent; }
+   }
   .form-control:focus, .form-control:active {
     border-color: #000; }
   .form-control::-webkit-input-placeholder {

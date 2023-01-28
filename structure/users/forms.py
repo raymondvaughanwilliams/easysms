@@ -24,7 +24,7 @@ class RegistrationForm(FlaskForm):
     mnotify = RadioField('Route SMS',choices = [('yes','yes'),('no','no')])
     role = SelectField('Route',validators=[DataRequired()],choices=[('user', 'User'), ('admin', 'Admin')])
     amount = StringField('Amount',validators=[DataRequired()])
-    submit = SubmitField('Register!')
+    submit = SubmitField('Submit!')
 
     def check_email(self,field):
         if User.query.filter_by(email=field.data).first():

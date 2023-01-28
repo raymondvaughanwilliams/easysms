@@ -9,7 +9,6 @@
 
         <div class="container shadow-lg rounded bg-white mt-5 mb-5">
 
-            <div class="card-body shadow-lg rounded ">
             <div class="session-title row">
                  <h2>Send Message</h2>
                
@@ -19,7 +18,7 @@
                   
                     <div class="form-group">
                     {{ form.message.label(class="form-control-label") }}
-                    {{ form.message(class="form-control form-control-lg",onkeyup="countChar(this)" )}}
+                    {{ form.message(class="form-control form-control-lg",onkeyup="countChar(this)",cols="6" )}}
                     </div>
 
                     <div id="charNum"></div>Characters remaining.Please note every 150 characters is one sms. If you use 151 characters you will be billed for two sms
@@ -93,7 +92,6 @@
 
     <script src="assets/js/wow.min.js"></script>
     <script src="assets/js/main.js"></script>
-    <script>
           <link  type="application/javascript" href="{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}">
 
   <script src="{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}"></script>

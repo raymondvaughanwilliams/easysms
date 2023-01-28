@@ -8,7 +8,7 @@
 
 
       <div class="row mt-4">
-        <div class="container rounded bg-white mt-5 mb-5">
+        <div class="container shadow-lg rounded bg-white mt-5 mb-5">
 
           <div class="card-body rounded ">
           <div class="session-title row">
@@ -37,16 +37,16 @@
                        {% for phonebook in phonebooks %}
                        <option value="{{phonebook.id}}">{{phonebook.name}}</option>
                        {% endfor %}<br>
-                       
+                       </select>
                   <div class="form-group">
                       {{ form.submit(class="btn btn-outline-info") }}
                   </div>
                 </div>
+              </div>
+            </div>
            
                    
-                   
-               
-               
+        
              
    
 
@@ -65,7 +65,6 @@
                     </div>
                     <div class="button-group px-3">
 
-                    <a href="{{ url_for('core.uploadcontacts') }}" class="btn btn-primary btn-sm" style="float:right; vertical-align: top;">Upload Contacts</a>
                     <a href="{{ url_for('core.uploadcontacts') }}" class="btn btn-primary btn-sm" style="float:right; vertical-align: top;">Upload Contacts</a>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">

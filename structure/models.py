@@ -47,8 +47,21 @@ class User(db.Model,UserMixin):
         return f"Username {self.username}"
 
 
+class Topup(db.Model):
+    __tablename__= "topups"
 
 
+    id = db.Column(db.Integer,primary_key=True)
+    amount = db.Column(db.Integer)
+    user_id = db.Column(db.Integer,db.ForeignKey('users.id'),nullable=True)
+    users= db.relationship('User',backref='topups',lazy=True)    
+    date = db.Column(db.Date,nullable=True,default=datetime.utcnow)
+    status = db.Column(db.String(255),nullable=True)
+    transaction_id = db.Column(db.String(255))
+    reference = db.Column(db.String(255))
+    
+    
+    
 class Message(db.Model):
     __tablename__= "messages"
 

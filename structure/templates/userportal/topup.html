@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block content %}
+    {# Features #}
+    
+    <!-- End Navbar -->
+  
+
+
+
+      <div class="row mt-4">
+        <div class="container shadow-lg rounded bg-white mt-5 mb-5">
+
+          <div class="card-body rounded ">
+          <div class="session-title row">
+            <h2>Topup</h2>  
+          </div>
+
+
+
+          <input type="hidden" name="public_key" value="FLWPUBK_TEST-SANDBOXDEMOKEY-X" />
+          <input type="hidden" name="customer[email]" value={{user.email}} />
+          <input type="hidden" name="customer[name]" value={{user.username}} />
+          <input type="hidden" name="tx_ref" value="{{ref}}" />
+          <div class="form-group">
+          <input type="text" name="amount" id="amount" />
+          </div>
+          <input type="hidden" name="payment_options" value="card, ussd, mobilemoney" />
+          <input type="hidden" name="currency" value="NGN" />
+          <input type="hidden" name="customer[phone]" value="233551660436" />
+          <input type="hidden" name="meta[token]" value="54" />
+          <input type="hidden" name="redirect_url" value="http://127.0.0.1:5000/confirmravepayment?amount={{total}}&" />
+             
+             
+                
+          <button class="primary-link" style="margin-right: auto;margin-left: auto;" onclick="makePayment()">Pay</button>
+                </div>
+              </div>
+            </div>
+           
+                   
+        
+             
+   
+
+                <div class="col-12">
+                  <div class="card shadow-lg mb-4 p-3">
+                    <div class="card-header pb-0">
+                      
+                      <div class="row">
+                        <div class="col-lg-6">
+                          <div class="d-flex flex-column h-100">
+                            <h5 class="font-weight-bolder">Contacts</h5>
+                            <p class="mb-5">Edit or delete contacts</p>
+                          
+                          </div>
+                      </div>
+                    </div>
+                    <div class="button-group px-3">
+
+                    <a href="{{ url_for('core.uploadcontacts') }}" class="btn btn-primary btn-sm" style="float:right; vertical-align: top;">Upload Contacts</a>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                      <div class="table-responsive p-0">
+                        <form action="{{ url_for('core.delete_batch')}}" method="POST">
+                        <table class="table align-items-center mb-0">
+                          <thead>
+                            <tr>
+                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>
+
+                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Number</th>
+                          
+                              <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                              <th class="text-secondary opacity-7"></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+
+
+                            {% for contact in topups.items %}
+                            <tr>
+                              <td><input type="checkbox" name="mycheckbox" value="{{topup.id}}" /></td>
+
+                              <td>
+                                <div class="d-flex px-2 py-1">
+                                
+                                  <div class="d-flex flex-column justify-content-center">
+                                    <h6 class="mb-0 text-sm">{{topup.name}}</h6>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <p class="text-xs font-weight-bold mb-0">{{ topup.number }}</p>
+                              </td>
+                          
+                              <td class="align-middle">
+                                <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit topup">
+                                
+                                       
+                                
+                              
+                              </td>
+                              <td><input type="checkbox" name="mycheckbox" value="{{topup.id}}" /></td>
+
+
+                            </tr>
+                            <tr>
+                              {% endfor %}
+                              
+                          </tbody>
+                        </table>
+                        <input type="submit" value="Delete Selected" />
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </div>
+                <br>
+
+
+
+         
+    </div>
+<br>
+
+
+
+
+
+
+
+         
+        </div>
+        </div>
+      </div>
+    </div>
+
+    
+    
+    <script>
+        function makePayment() {
+            console.log("makePayme")
+            console.log(document.getElementById('amount').value)
+          FlutterwaveCheckout({
+            
+            amount: document.getElementById('amount').value,
+            public_key: "FLWPUBK_TEST-SANDBOXDEMOKEY-X",
+            tx_ref: "{{ tx_ref }}",
+            currency: "NGN",
+            payment_options: "card, banktransfer, ussd",
+            redirect_url: "http://127.0.0.1:5000/confirmtopup?amount={{total}}&",
+            meta: {
+              consumer_id: 23,
+              consumer_mac: "92a3-912ba-1192a",
+            },
+            customer: {
+              email: "{{ user.email }}",
+              phone_number: "08102909304",
+              name: "{{ user.username }}",
+            },
+            customizations: {
+              title: "EasySMS",
+              description: "Credit Topup",
+              logo: "https://freepngimg.com/thumb/numbers/5-2-3-number-png.png",
+            },
+          });
+        }
+      </script>  
+     
+
+    
+{% endblock %}

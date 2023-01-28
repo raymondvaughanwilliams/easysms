@@ -10,12 +10,13 @@ from flask_login import current_user
 from structure.models import User
 
 class MessageForm(FlaskForm):
-    message = StringField('Message',validators=[DataRequired()])
+    message = TextAreaField('Message',validators=[DataRequired()])
     destination = TextAreaField('Destination')
     contacts = FileField('Upload Contacts', validators=[FileAllowed(['csv'])])
     date = DateField('Choose Date', [validators.DataRequired()] ,format='%Y-%m-%d',default=datetime.datetime.now)
     time  = TimeField('Time',default=datetime.datetime.now)
     phonebook = SelectField('Phonebook', choices=[])
+    amount = IntegerField('Amount',validators=[DataRequired()])
 
     submit = SubmitField('Submit')
 

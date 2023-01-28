@@ -5,56 +5,57 @@
     <!-- ====== Hero Start ====== -->
     
 
-<div id="messNum"></div>
 
-        <div class="container shadow-lg rounded bg-white mt-5 mb-5">
+    
+                     
+                     
 
-            <div class="card-body shadow-lg rounded ">
-            <div class="session-title row">
-                 <h2>Send Message</h2>
-               
-                 <form class="form-group" method="POST" enctype="multipart/form-data">
-                    {{ form.hidden_tag() }}
-                    <div class="form-group">
-                    {{ form.email.label }} {{ form.email() }}<br>
-                  </div>
-                  <div class="form-group">
-                    {{ form.username.label }} {{ form.username() }}<br>
-                  </div>
-                    <div class="form-group">
-                    {{ form.name.label }} {{ form.name() }}<br>
-                  </div>
-                    <div class="form-group">
-                    {{ form.number.label }} {{ form.number() }}<br>
-                  </div>
-                  <div class="form-group">
-                    {{ form.routesms.label }} {{ form.routesms() }}
-                  </div>
-                    <div class="form-group">
-                    {{ form.mnotify.label }} {{ form.mnotify() }}
-                  </div>
-                  <div class="form-group">
-                    {{ form.role.label }} {{ form.role() }}
-                  </div>
                  
-                   
-                    <div class="form-group">
-                    {{ form.submit() }}
-                  </div>
-                  
-                 </form>
+                     <div class="container shadow-lg rounded bg-white mt-5 mb-5">
+
+                      <div class="session-title row">
+                           <h2>Add User</h2>
+                         
+                           <form class="form-group" method="POST" enctype="multipart/form-data">
+                              {{ form.hidden_tag() }}
+                         
                             
-                    </div>
-                  </div>
-                    <h2></h2>
-               
-                       
-                     </div>
-                     
-                     
-
-                 
-               
+                              <div class="form-group">
+                              {{ form.email.label(class="form-control-label") }}
+                              {{ form.email(class="form-control form-control-lg",cols="6") }}  
+                              </div>
+          
+          
+                              <div class="form-group">
+                                  {{ form.username.label(class="form-control-label") }}
+                                  {{ form.username(class="form-control form-control-lg") }}
+                                  </div>
+                                  <div class="form-group">
+                                      {{ form.name.label(class="form-control-label") }}
+                                      {{ form.name(class="form-control form-control-lg") }}
+                                      </div>
+                                      <div class="form-group">
+                                        {{ form.number.label(class="form-control-label") }}
+                                        {{ form.number(class="form-control form-control-lg") }}
+                                        </div>
+                                        <div class="form-group">
+                                          {{ form.routesms.label(class="form-control-label") }}
+                                          {{ form.routesms(class="form-control form-control-lg") }}
+                                          </div>
+                                          <div class="form-group">
+                                            {{ form.role.label(class="form-control-label") }}
+                                            {{ form.role(class="form-control form-control-lg") }}
+                                            </div>
+                                     
+                                   
+                                    
+                              <div class="form-group">
+                                  {{ form.submit(class="btn btn-outline-info") }}
+                              </div>
+                           </form>
+                                      
+                              </div>
+                            </div>
        
          
      
@@ -260,7 +261,6 @@
 
     <script src="assets/js/wow.min.js"></script>
     <script src="assets/js/main.js"></script>
-    <script>
           <link  type="application/javascript" href="{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}">
 
   <script src="{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}"></script>
